@@ -23,6 +23,7 @@
         <button onclick="iniciarQuestao1()">Questão 1</button>
         <button onclick="iniciarQuestao2()">Questão 2a</button>
         <button onclick="iniciarQuestao2b()">Questão 2b</button>
+        <button onclick="iniciarQuestao3a()">Questão 3a</button>
         <!-- Adicione mais botões para outras questões -->
     </div>
     <canvas id="canvas" width="800" height="600"></canvas>
@@ -88,6 +89,24 @@
             script.onload = function() {
                 if (typeof window["startQuestao2b"] === "function") {
                     window["startQuestao2b"](canvas, animFrameIdRef);
+                }
+            };
+            document.body.appendChild(script);
+        }
+
+        function iniciarQuestao3a() {
+            pararAnimacao();
+            limparCanvas();
+            const oldScript = document.getElementById("scriptQuestao");
+            if (oldScript) {
+                oldScript.remove();
+            }
+            const script = document.createElement("script");
+            script.src = `questoes/3a.js`;
+            script.id = "scriptQuestao";
+            script.onload = function() {
+                if (typeof window["startQuestao3a"] === "function") {
+                    window["startQuestao3a"](canvas, animFrameIdRef);
                 }
             };
             document.body.appendChild(script);
