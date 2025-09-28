@@ -24,7 +24,7 @@
         <button onclick="iniciarQuestao2()">Questão 2a</button>
         <button onclick="iniciarQuestao2b()">Questão 2b</button>
         <button onclick="iniciarQuestao3a()">Questão 3a</button>
-        <button onclick="window.open('3b.html', '_blank')">Questão 3b (3D)</button>
+        <button onclick="window.open('questoes/3b.html', '_blank')">Questão 3b (3D)</button>
     </div>
     <canvas id="canvas" width="800" height="600"></canvas>
     <iframe id="iframe3d" src="" width="800" height="600" style="display:none; margin:0 auto; border:none;"></iframe>
@@ -123,7 +123,7 @@
             // Esconde o canvas e mostra o iframe
             document.getElementById("canvas").style.display = "none";
             document.getElementById("iframe3d").style.display = "block";
-            document.getElementById("iframe3d").src = "3b.html";
+            document.getElementById("iframe3d").src = "questoes/3b.html";
             pararAnimacao();
         }
     </script>
