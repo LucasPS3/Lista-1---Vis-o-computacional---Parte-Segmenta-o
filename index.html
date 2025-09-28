@@ -1,79 +1,105 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Ficha 2 - Computação Gráfica</title>
-        <style>
-            canvas {
-                background: #222;
-                display: block;
-                margin: 0 auto;
-            }
-            .botoes {
-                text-align: center;
-                margin-bottom: 10px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="botoes">
-            <button onclick="iniciarQuestao1()">Questão 1</button>
-            <button onclick="iniciarQuestao2()">Questão 2</button>
-            <!-- Adicione mais botões para outras questões -->
-        </div>
-        <canvas id="canvas" width="800" height="600"></canvas>
-        <script>
-            const canvas = document.getElementById("canvas");
-            let animFrameIdRef = { id: null };
 
-            function limparCanvas() {
-                const ctx = canvas.getContext("2d");
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            }
+<head>
+    <meta charset="UTF-8" />
+    <title>Ficha 2 - Computação Gráfica</title>
+    <style>
+        canvas {
+            background: #222;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .botoes {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
 
-            function pararAnimacao() {
-                if (animFrameIdRef.id) {
-                    cancelAnimationFrame(animFrameIdRef.id);
-                    animFrameIdRef.id = null;
+<body>
+    <div class="botoes">
+        <button onclick="iniciarQuestao1()">Questão 1</button>
+        <button onclick="iniciarQuestao2()">Questão 2a</button>
+        <button onclick="iniciarQuestao2b()">Questão 2b</button>
+        <!-- Adicione mais botões para outras questões -->
+    </div>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        let animFrameIdRef = {
+            id: null
+        };
+
+        function limparCanvas() {
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function pararAnimacao() {
+            if (animFrameIdRef.id) {
+                cancelAnimationFrame(animFrameIdRef.id);
+                animFrameIdRef.id = null;
+            }
+        }
+
+
+        function carregarScriptQuestao(numeroQuestao) {
+            pararAnimacao();
+            limparCanvas();
+            // Remove script antigo se existir
+            const oldScript = document.getElementById("scriptQuestao");
+            if (oldScript) {
+                oldScript.remove();
+            }
+            // Cria novo script
+            const script = document.createElement("script");
+            // Corrige referência para 2a.js
+            script.src = numeroQuestao === 2 ? `questoes/2a.js` : `questoes/${numeroQuestao}.js`;
+            script.id = "scriptQuestao";
+            script.onload = function() {
+                const funcName = `startQuestao${numeroQuestao}`;
+                if (typeof window[funcName] === "function") {
+                    window[funcName](canvas, animFrameIdRef);
                 }
+            };
+            document.body.appendChild(script);
+        }
+
+        function iniciarQuestao1() {
+            carregarScriptQuestao(1);
+        }
+
+        function iniciarQuestao2() {
+            carregarScriptQuestao(2);
+        }
+
+        function iniciarQuestao2b() {
+            pararAnimacao();
+            limparCanvas();
+            const oldScript = document.getElementById("scriptQuestao");
+            if (oldScript) {
+                oldScript.remove();
             }
-
-
-            function carregarScriptQuestao(numeroQuestao) {
-                pararAnimacao();
-                limparCanvas();
-                // Remove script antigo se existir
-                const oldScript = document.getElementById("scriptQuestao");
-                if (oldScript) {
-                    oldScript.remove();
+            const script = document.createElement("script");
+            script.src = `questoes/2b.js`;
+            script.id = "scriptQuestao";
+            script.onload = function() {
+                if (typeof window["startQuestao2b"] === "function") {
+                    window["startQuestao2b"](canvas, animFrameIdRef);
                 }
-                // Cria novo script
-                const script = document.createElement("script");
-                // Corrige referência para 2a.js
-                script.src = numeroQuestao === 2 ? `questoes/2a.js` : `questoes/${numeroQuestao}.js`;
-                script.id = "scriptQuestao";
-                script.onload = function() {
-                    const funcName = `startQuestao${numeroQuestao}`;
-                    if (typeof window[funcName] === "function") {
-                        window[funcName](canvas, animFrameIdRef);
-                    }
-                };
-                document.body.appendChild(script);
-            }
+            };
+            document.body.appendChild(script);
+        }
+        // Para adicionar mais questões, crie arquivos como questoes/3.js e funções iniciarQuestao3() { carregarScriptQuestao(3); }
 
-            function iniciarQuestao1() {
-                carregarScriptQuestao(1);
-            }
-            function iniciarQuestao2() {
-                carregarScriptQuestao(2);
-            }
-            // Para adicionar mais questões, crie arquivos como questoes/3.js e funções iniciarQuestao3() { carregarScriptQuestao(3); }
+        // Adicione funções para outras questões aqui, exemplo:
+        // function iniciarQuestao2() { carregarScriptQuestao("questao2.js", "startQuestao2"); }
 
-            // Adicione funções para outras questões aqui, exemplo:
-            // function iniciarQuestao2() { carregarScriptQuestao("questao2.js", "startQuestao2"); }
+        // Inicializa com a Questão 1 por padrão
+        iniciarQuestao1();
+    </script>
+</body>
 
-            // Inicializa com a Questão 1 por padrão
-            iniciarQuestao1();
-        </script>
-    </body>
 </html>
