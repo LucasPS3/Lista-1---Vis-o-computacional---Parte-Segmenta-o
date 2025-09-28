@@ -48,7 +48,7 @@ function startQuestao2(canvas, animFrameIdRef) {
         // Junta do braço
         ctx.beginPath();
         ctx.arc(0, 0, 12, 0, Math.PI * 2);
-        ctx.fillStyle = "#222";
+        ctx.fillStyle = "#fff";
         ctx.fill();
 
         // Junta do cotovelo
@@ -56,7 +56,7 @@ function startQuestao2(canvas, animFrameIdRef) {
         ctx.translate(0, -comprimentoBraco);
         ctx.beginPath();
         ctx.arc(0, 0, 10, 0, Math.PI * 2);
-        ctx.fillStyle = "#222";
+        ctx.fillStyle = "#fff";
         ctx.fill();
         ctx.restore();
 
