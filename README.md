@@ -9,9 +9,7 @@ Este projeto contém questões resolvidas da lista 1,Parte 2:Segmentação, para
 
 ## Resumo Geral de Uso das Abas
 
-Canny – Grupo 1 (canny.html)
-
-Objetivo: Testar a detecção de bordas nas imagens do Grupo 1 (canguru.bmp, indio.bmp, cavalo.bmp, tigre.bmp).
+**Canny – Grupo 1 (canny.html)**
 
 Passos:
 
@@ -27,9 +25,8 @@ Mostra a imagem original e a detecção de bordas.
 
 Permite testar diferentes thresholds e comparar resultados.
 
-Mean Shift + Canny – Grupo 1 (meanshift_canny_grupo1.html)
 
-Objetivo: Aplicar segmentação de regiões via Mean Shift e depois detectar bordas com Canny.
+**Mean Shift + Canny – Grupo 1 (meanshift_canny_grupo1.html)**
 
 Passos:
 
@@ -47,9 +44,7 @@ Colunas lado a lado: Original → Segmentada (Mean Shift) → Bordas (Canny).
 
 Útil para analisar se o pré-processamento melhora a detecção de bordas.
 
-Mean Shift + Canny – Grupo 2 (meanshift_canny_grupo2.html)
-
-Objetivo: Aplicar os mesmos parâmetros do Grupo 1 nas imagens do Grupo 2 (araras2.bmp, flor.bmp, placas.bmp, predio.bmp, road.bmp).
+**Mean Shift + Canny – Grupo 2 (meanshift_canny_grupo2.html)**
 
 Passos:
 
@@ -67,7 +62,7 @@ Permite analisar se os parâmetros do Grupo 1 transferem bem para novas imagens.
 
 Observações gerais sobre os controles
 
-Sliders:
+**Sliders:**
 
 hs: controla o raio espacial do Mean Shift (quanto maior, mais regiões homogêneas).
 
