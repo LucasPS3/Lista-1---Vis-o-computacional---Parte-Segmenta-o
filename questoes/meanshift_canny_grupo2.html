@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mean Shift + Canny — Grupo 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .image-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        canvas {
+            width: 100%;
+            max-width: 350px;
+            margin: 10px auto;
+            display: block;
+        }
+        
+        input[type="range"] {
+            width: 120px;
+        }
+        
+        label {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Mean Shift + Canny — Grupo 2</h1>
+
+    <div class="controls">
+        <select id="imageSelect">
+            <option value="araras2.bmp">Araras</option>
+            <option value="flor.bmp">Flor</option>
+            <option value="placas.bmp">Placas</option>
+            <option value="predio.bmp">Prédio</option>
+            <option value="road.bmp">Estrada</option>
+        </select>
+        <button id="loadBtn">Carregar Imagem</button>
+
+        <div style="margin-top: 10px;">
+            <label for="lowThresh">Canny Low:</label>
+            <input type="range" id="lowThresh" min="0" max="255" value="50">
+            <span id="lowValue">50</span>
+
+            <label for="highThresh" style="margin-left:15px;">Canny High:</label>
+            <input type="range" id="highThresh" min="0" max="255" value="150">
+            <span id="highValue">150</span>
+        </div>
+
+        <button id="applyBtn" style="margin-top: 10px;">Aplicar Mean Shift + Canny</button>
+    </div>
+
+    <div class="container">
+        <div class="image-container">
+            <h3>Original</h3>
+            <canvas id="originalCanvas"></canvas>
+        </div>
+        <div class="image-container">
+            <h3>Mean Shift</h3>
+            <canvas id="msCanvas"></canvas>
+        </div>
+        <div class="image-container">
+            <h3>Canny</h3>
+            <canvas id="cannyCanvas"></canvas>
+        </div>
+    </div>
+
+    <script src="meanshift_canny_grupo2.js"></script>
+</body>
+
+</html>

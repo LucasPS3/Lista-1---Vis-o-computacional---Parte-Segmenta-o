@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Segmentação Mean Shift - Grupo 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .image-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        canvas {
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            display: block;
+        }
+        
+        input[type="range"] {
+            width: 150px;
+        }
+        
+        label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Segmentação Mean Shift — Grupo 1</h1>
+
+    <div class="controls">
+        <select id="imageSelect">
+            <option value="canguru.bmp">Canguru</option>
+            <option value="indio.bmp">Indio</option>
+            <option value="cavalo.bmp">Cavalo</option>
+            <option value="tigre.bmp">Tigre</option>
+        </select>
+        <button id="loadBtn">Carregar Imagem</button>
+
+        <div style="margin-top: 10px;">
+            <label for="hs">hs (espacial):</label>
+            <input type="range" id="hs" min="5" max="20" value="10">
+            <span id="hsValue">10</span>
+        </div>
+        <div>
+            <label for="hr">hr (radiométrico):</label>
+            <input type="range" id="hr" min="10" max="30" value="20">
+            <span id="hrValue">20</span>
+        </div>
+
+        <button id="applyBtn" style="margin-top: 10px;">Aplicar Mean Shift</button>
+    </div>
+
+    <div class="container">
+        <div class="image-container">
+            <h3>Imagem Original</h3>
+            <canvas id="originalCanvas"></canvas>
+        </div>
+        <div class="image-container">
+            <h3>Imagem Segmentada</h3>
+            <canvas id="msCanvas"></canvas>
+        </div>
+    </div>
+
+    <script src="meanshift.js"></script>
+</body>
+
+</html>

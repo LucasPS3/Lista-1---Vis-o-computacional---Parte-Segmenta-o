@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detecção de Bordas - Grupo 2 (com Pré-processamento)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .image-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        canvas {
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            display: block;
+        }
+        
+        select,
+        button {
+            padding: 8px;
+            margin: 5px;
+        }
+        
+        h3 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Detecção de Bordas com Canny — Grupo 2 (com Filtro Gaussiano)</h1>
+
+    <div class="controls">
+        <select id="imageSelect">
+            <option value="araras2.bmp">Araras</option>
+            <option value="flor.bmp">Flor</option>
+            <option value="placas.bmp">Placas</option>
+            <option value="predio.bmp">Prédio</option>
+            <option value="road.bmp">Estrada</option>
+        </select>
+        <button id="loadBtn">Carregar Imagem</button>
+        <button id="applyBtn">Aplicar Canny</button>
+    </div>
+
+    <div class="container">
+        <div class="image-container">
+            <h3>Imagem Original</h3>
+            <canvas id="originalCanvas"></canvas>
+        </div>
+        <div class="image-container">
+            <h3>Imagem com Detecção de Bordas</h3>
+            <canvas id="cannyCanvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const originalCanvas = document.getElementById('originalCanvas');
+        const cannyCanvas = document.getElementById('cannyCanvas');
+        let originalImage = null;
+
+        document.getElementById('loadBtn').onclick = loadImage;
+        document.getElementById('applyBtn').onclick = applyCanny;
+
+        function loadImage() {
+            const imageName = document.getElementById('imageSelect').value;
+            const img = new Image();
+            img.src = '../Imagens/' + imageName;
+            img.onload = function() {
+                originalImage = img;
+                originalCanvas.width = img.width;
+                originalCanvas.height = img.height;
+                cannyCanvas.width = img.width;
+                cannyCanvas.height = img.height;
+
+                const ctx = originalCanvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+            };
+        }
+
+        function applyCanny() {
+            if (!originalImage) return;
+
+            const ctx = originalCanvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
+
+            // Pré-processamento: filtro Gaussiano
+            const blurredData = applyGaussianBlur(imageData);
+
+            // Conversão para escala de cinza
+            const grayData = toGrayscale(blurredData);
+
+            // Aplicar Canny simplificado com limiares fixos
+            const edgeData = cannySimplified(grayData, 80, 150);
+
+            const outCtx = cannyCanvas.getContext('2d');
+            outCtx.putImageData(edgeData, 0, 0);
+        }
+
+        function toGrayscale(imageData) {
+            const data = imageData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                data[i] = data[i + 1] = data[i + 2] = gray;
+            }
+            return imageData;
+        }
+
+        function applyGaussianBlur(imageData) {
+            const kernel = [
+                [1, 2, 1],
+                [2, 4, 2],
+                [1, 2, 1]
+            ];
+            const kernelSum = 16;
+            const width = imageData.width;
+            const height = imageData.height;
+            const src = imageData.data;
+            const output = new ImageData(width, height);
+            const dst = output.data;
+
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    let r = 0;
+                    for (let ky = -1; ky <= 1; ky++) {
+                        for (let kx = -1; kx <= 1; kx++) {
+                            const px = (y + ky) * width + (x + kx);
+                            r += src[px * 4] * kernel[ky + 1][kx + 1];
+                        }
+                    }
+                    const i = (y * width + x) * 4;
+                    const val = r / kernelSum;
+                    dst[i] = dst[i + 1] = dst[i + 2] = val;
+                    dst[i + 3] = 255;
+                }
+            }
+            return output;
+        }
+
+        function cannySimplified(imageData, lowThreshold, highThreshold) {
+            const width = imageData.width;
+            const height = imageData.height;
+            const src = imageData.data;
+            const dst = new ImageData(width, height);
+            const out = dst.data;
+
+            const gx = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
+            const gy = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
+
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    let sumX = 0,
+                        sumY = 0;
+                    for (let ky = -1; ky <= 1; ky++) {
+                        for (let kx = -1; kx <= 1; kx++) {
+                            const px = (y + ky) * width + (x + kx);
+                            const val = src[px * 4];
+                            const idx = (ky + 1) * 3 + (kx + 1);
+                            sumX += val * gx[idx];
+                            sumY += val * gy[idx];
+                        }
+                    }
+
+                    const magnitude = Math.sqrt(sumX * sumX + sumY * sumY);
+                    const i = (y * width + x) * 4;
+                    const edge = magnitude >= highThreshold ? 255 : magnitude >= lowThreshold ? 128 : 0;
+                    out[i] = out[i + 1] = out[i + 2] = edge;
+                    out[i + 3] = 255;
+                }
+            }
+            return dst;
+        }
+
+        // Carrega a primeira imagem automaticamente
+        loadImage();
+    </script>
+</body>
+
+</html>
