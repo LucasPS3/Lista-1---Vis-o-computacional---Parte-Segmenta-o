@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Diferença entre Imagem Original e Filtrada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        h1,
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .resultados {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .resultado-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        canvas {
+            display: block;
+            margin: 10px auto;
+            max-width: 100%;
+            background: white;
+        }
+        
+        .controles {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        
+        select {
+            padding: 8px;
+            margin: 5px;
+        }
+        
+        .explanation {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Diferença entre Imagem Original e Filtrada</h1>
+    <div class="container">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="explanation">
+        <h2>Explicação da Operação</h2>
+        <p>Esta implementação demonstra duas abordagens para detectar bordas e detalhes finos em uma imagem:</p>
+        <ol>
+            <li><strong>Diferença Absoluta:</strong> Calcula |I - (I * Box)|, onde I é a imagem original e Box é um filtro passa-baixa.</li>
+            <li><strong>Filtro Diferença:</strong> Aplica diretamente um filtro equivalente à operação de diferença.</li>
+        </ol>
+        <p>O resultado esperado em ambos os casos é uma imagem que destaca as altas frequências (bordas e detalhes) da imagem original, funcionando de maneira similar a um detector de bordas.</p>
+    </div>
+
+    <script src="diferenca.js"></script>
+    <script>
+        window.onload = function() {
+            const canvas = document.getElementById('canvas');
+            startDiferenca(canvas);
+        };
+    </script>
+</body>
+
+</html>

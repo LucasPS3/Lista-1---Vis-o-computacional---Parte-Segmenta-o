@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Ficha 2 - Computação Gráfica</title>
+    <title>Visão Computacional: Lista 1</title>
     <style>
         canvas {
             background: #222;
@@ -20,14 +20,15 @@
 
 <body>
     <div class="botoes">
-        <button onclick="iniciarQuestao1()">Questão 1</button>
-        <button onclick="iniciarQuestao2()">Questão 2a</button>
-        <button onclick="iniciarQuestao2b()">Questão 2b</button>
-        <button onclick="iniciarQuestao3a()">Questão 3a</button>
-        <button onclick="window.open('questoes/3b.html', '_blank')">Questão 3b (3D)</button>
+        <button onclick="iniciarBinarizacao()">Binarização</button>
+        <button onclick="window.open('questoes/processamento.html', '_blank')">Contraste e Brilho</button>
+        <button onclick="window.open('questoes/filtros.html', '_blank')">Filtros Box e Laplaciano</button>
+        <button onclick="window.open('questoes/diferenca.html', '_blank')">Diferença Absoluta</button>
+        <button onclick="window.open('questoes/histogramas.html', '_blank')">Análise de Histogramas P&B</button>
+        <button onclick="window.open('questoes/histogramas_araras.html', '_blank')">Análise de Histogramas - Araras</button>
     </div>
     <canvas id="canvas" width="800" height="600"></canvas>
-    <iframe id="iframe3d" src="" width="800" height="600" style="display:none; margin:0 auto; border:none;"></iframe>
+
     <script>
         const canvas = document.getElementById("canvas");
         let animFrameIdRef = {
@@ -44,10 +45,15 @@
                 cancelAnimationFrame(animFrameIdRef.id);
                 animFrameIdRef.id = null;
             }
+            // Limpar elementos da binarização se existirem
+            if (typeof window.cleanupBinarizacao === 'function') {
+                window.cleanupBinarizacao();
+                window.cleanupBinarizacao = null;
+            }
         }
 
 
-        function carregarScriptQuestao(numeroQuestao) {
+        function carregarScript(scriptName) {
             pararAnimacao();
             limparCanvas();
             // Remove script antigo se existir
@@ -57,75 +63,29 @@
             }
             // Cria novo script
             const script = document.createElement("script");
-            script.src = numeroQuestao === 2 ? `questoes/2a.js` : `questoes/${numeroQuestao}.js`;
+            script.src = `questoes/${scriptName}.js`;
             script.id = "scriptQuestao";
             script.onload = function() {
-                const funcName = `startQuestao${numeroQuestao}`;
+                const funcName = `start${scriptName.charAt(0).toUpperCase() + scriptName.slice(1)}`;
                 if (typeof window[funcName] === "function") {
-                    window[funcName](canvas, animFrameIdRef);
+                    const cleanup = window[funcName](canvas, animFrameIdRef);
+                    if (cleanup) {
+                        window[`cleanup${scriptName.charAt(0).toUpperCase() + scriptName.slice(1)}`] = cleanup;
+                    }
                 }
             };
             document.body.appendChild(script);
         }
 
-        function iniciarQuestao1() {
-            carregarScriptQuestao(1);
+        function iniciarBinarizacao() {
+            carregarScript('binarizacao');
         }
 
-        function iniciarQuestao2() {
-            carregarScriptQuestao(2);
+        function iniciarContrasteBrilho() {
+            carregarScript('contrast_brightness');
         }
-
-        function iniciarQuestao2b() {
-            pararAnimacao();
-            limparCanvas();
-            const oldScript = document.getElementById("scriptQuestao");
-            if (oldScript) {
-                oldScript.remove();
-            }
-            const script = document.createElement("script");
-            script.src = `questoes/2b.js`;
-            script.id = "scriptQuestao";
-            script.onload = function() {
-                if (typeof window["startQuestao2b"] === "function") {
-                    window["startQuestao2b"](canvas, animFrameIdRef);
-                }
-            };
-            document.body.appendChild(script);
-        }
-
-        function iniciarQuestao3a() {
-            pararAnimacao();
-            limparCanvas();
-            const oldScript = document.getElementById("scriptQuestao");
-            if (oldScript) {
-                oldScript.remove();
-            }
-            const script = document.createElement("script");
-            script.src = `questoes/3a.js`;
-            script.id = "scriptQuestao";
-            script.onload = function() {
-                if (typeof window["startQuestao3a"] === "function") {
-                    window["startQuestao3a"](canvas, animFrameIdRef);
-                }
-            };
-            document.body.appendChild(script);
-        }
-        // Para adicionar mais questões, crie arquivos como questoes/3.js e funções iniciarQuestao3() { carregarScriptQuestao(3); }
-
-        // Adicione funções para outras questões aqui, exemplo:
-        // function iniciarQuestao2() { carregarScriptQuestao("questao2.js", "startQuestao2"); }
-
-        // Inicializa com a Questão 1 por padrão
-        iniciarQuestao1();
-
-        function mostrarQuestao3b() {
-            // Esconde o canvas e mostra o iframe
-            document.getElementById("canvas").style.display = "none";
-            document.getElementById("iframe3d").style.display = "block";
-            document.getElementById("iframe3d").src = "questoes/3b.html";
-            pararAnimacao();
-        }
+        // Inicializa com a binarização por padrão
+        iniciarBinarizacao();
     </script>
 </body>
 
