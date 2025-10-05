@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Visão Computacional:Lista 1</title>
+    <title>Visão Computacional: Lista 1</title>
     <style>
         canvas {
             background: #222;
@@ -15,18 +15,31 @@
             text-align: center;
             margin-bottom: 10px;
         }
+        
+        button {
+            margin: 5px;
+            padding: 8px 14px;
+            font-size: 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
     <div class="botoes">
-        <button onclick="iniciarBinarizacao()">Binarização</button>
-        <button onclick="window.open('questoes/processamento.html', '_blank')">Contraste e Brilho</button>
-        <button onclick="window.open('questoes/filtros.html', '_blank')">Filtros Box e Laplaciano</button>
-        <button onclick="window.open('questoes/diferenca.html', '_blank')">Diferença Absoluta</button>
-        <button onclick="window.open('questoes/histogramas.html', '_blank')">Análise de Histogramas P&B</button>
-        <button onclick="window.open('questoes/histogramas_araras.html', '_blank')">Análise de Histogramas - Araras</button>
+        <!-- Questões da Lista 1 -->
+        <button onclick="iniciarCanny()">Detecção de Bordas (Canny)</button>
+        <button onclick="window.open('questoes/canny.html', '_blank')">Abrir em Nova Aba</button>
     </div>
+
     <canvas id="canvas" width="800" height="600"></canvas>
 
     <script>
@@ -45,23 +58,23 @@
                 cancelAnimationFrame(animFrameIdRef.id);
                 animFrameIdRef.id = null;
             }
-            // Limpar elementos da binarização se existirem
-            if (typeof window.cleanupBinarizacao === 'function') {
-                window.cleanupBinarizacao();
-                window.cleanupBinarizacao = null;
+
+            // Limpar script anterior (caso tenha cleanup)
+            if (typeof window.cleanupCanny === 'function') {
+                window.cleanupCanny();
+                window.cleanupCanny = null;
             }
         }
-
 
         function carregarScript(scriptName) {
             pararAnimacao();
             limparCanvas();
-            // Remove script antigo se existir
+
+            // Remover script anterior se existir
             const oldScript = document.getElementById("scriptQuestao");
-            if (oldScript) {
-                oldScript.remove();
-            }
-            // Cria novo script
+            if (oldScript) oldScript.remove();
+
+            // Criar novo script
             const script = document.createElement("script");
             script.src = `questoes/${scriptName}.js`;
             script.id = "scriptQuestao";
@@ -77,15 +90,13 @@
             document.body.appendChild(script);
         }
 
-        function iniciarBinarizacao() {
-            carregarScript('binarizacao');
+        // Função da questão de Canny
+        function iniciarCanny() {
+            carregarScript('canny');
         }
 
-        function iniciarContrasteBrilho() {
-            carregarScript('contrast_brightness');
-        }
-        // Inicializa com a binarização por padrão
-        iniciarBinarizacao();
+        // Nenhuma função inicial chamada automaticamente
+        limparCanvas();
     </script>
 </body>
 
